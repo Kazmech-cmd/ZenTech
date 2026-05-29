@@ -1,11 +1,14 @@
 FROM php:8.3-fpm-alpine
 
-# Установка системных зависимостей, Node.js и инструментов сборки
+# 1. Установка системных зависимостей, библиотек для картинок (jpeg, freetype, webp), Node.js и инструментов сборки
 RUN apk add --no-cache \
     nginx \
     nodejs \
     npm \
     libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libwebp-dev \
     libxml2-dev \
     zip \
     unzip \
@@ -13,7 +16,10 @@ RUN apk add --no-cache \
     curl \
     oniguruma-dev
 
-# Установка PHP расширений
+# 2. Предварительная настройка расширения gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
+
+# 3. Установка PHP расширений (теперь gd соберется без ошибок)
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Установка Composer
@@ -32,9 +38,10 @@ RUN npm install && npm run build
 RUN mkdir -p /run/nginx
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-# Настройка прав для Laravel
-RUN chown -r www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Настройка прав для Laravel (Исправлено на заглавную -R)
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 80
 
-CMD nginx && php-fpm
+# Корректный запуск Nginx на переднем плане + PHP-FPM
+CMD sh -c "php-fpm -D && nginx -g 'daemon off;'"
