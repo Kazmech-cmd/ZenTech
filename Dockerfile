@@ -38,8 +38,11 @@ RUN npm install && npm run build
 RUN mkdir -p /run/nginx
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-# Настройка прав для Laravel (Исправлено на заглавную -R)
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# Автоматически создаем директорию и пустой файл базы данных SQLite внутри контейнера
+RUN mkdir -p /var/www/database && touch /var/www/database/database.sqlite
+
+# Настройка прав для Laravel (включая права для папки с базой данных)
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/database
 
 EXPOSE 80
 
