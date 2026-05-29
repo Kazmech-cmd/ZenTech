@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.zen-select {
+        appearance: none; /* Убираем стандартную стрелку */
+        background-color: #f9fafb; /* серый фон как у тебя */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238DB04B'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1em;
+        padding: 0.75rem 2.5rem 0.75rem 1rem;
+        border: 2px solid transparent;
+        border-radius: 0.75rem; /* Скругление под стиль карточек */
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    /* Стиль при наведении и фокусе */
+    .zen-select:hover, .zen-select:focus {
+        background-color: #f3fcf3; /* zen-light из твоих карточек */
+        border-color: #8DB04B; /* твой зеленый акцент */
+    }
+
+    /* Это поможет немного улучшить вид выпадающего меню в некоторых браузерах */
+    .zen-select option {
+        background: white;
+        color: #1a1a1a;
+        padding: 10px;
+    }
