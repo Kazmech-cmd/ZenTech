@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Если приложение запущено на Render (в production), принудительно включаем HTTPS
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
